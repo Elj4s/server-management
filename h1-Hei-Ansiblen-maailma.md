@@ -41,3 +41,36 @@ Tarkistin, että palvelu on käynnissä komennolla "sudo systemctl status ssh".
 
 Testasin SSH-yhteyttä komennolla "ssh localhost". Kirjautuminen onnistui Debian-käyttäjän salasanalla.
 ![SSH-kirjautuminen](ssh-localhost.png)
+
+## c) Pubkey
+
+Tässä tehtävässä automatisoin SSH-kirjautumisen julkisella avaimella. Loin ensin avainparin komennolla "ssh-keygen".
+Kopioin julkisen avaimen komennolla "ssh-copy-id localhost".
+![Julkisen avaimen kopiointi](ssh-copy-id.png)
+
+Kokeilin kirjautumista komennolla "ssh localhost". Kirjautuminen onnistui ilman kysymättä salasanaa.
+![Kirjautuminen SSH-avaimella](ssh-localhost2.png)
+
+## d) Hei Ansible
+
+Asensin Ansiblen komennolla sudo apt-get install ansible. Asensin myös ohjelmat micro, bash-completion ja tree niiden hyödyllisyyden vuoksi. Loin ansible-kansion, jonne loin hosts.ini-tiedoston.
+Nyt lisäsin tiedostoon hallittavaksi koneeksi vain localhostin. Loin myös tiedoston ansible.cfg, johon kirjoitin "[defaults] inventory = hosts.ini". Tämä kertoi Ansiblelle, että hosts.ini on oletus, joten sitä ei tarvitse koko ajan määrittää erikseen.
+
+Tein site.yml playbookin, joka listaa mitkä tietokoneet saavat mitkä konfiguraatiot. Tällä saan jokaiselle tietokoneelle (tässä tapauksessa vain localhost) roolin "hello": 
+- hosts: all
+  roles:
+   - hello
+ 
+Loin vielä roolin "hello" tiedostoon "roles/hello/tasks/main.yml". 
+Suoritin playbookin komennolla "ansible-playbook site.yml".
+![Ansiblen suoritus](ansible-playbook.png)
+
+![Hello Ansible SSH-testillä](hello-ansible-ssh.png)
+
+## Lähteet
+
+Karvinen, T. 2026. Hello Ansible. Luettavissa: https://terokarvinen.com/hello-ansible/. Luettu: 28.10.2026.
+
+Karvinen, T. 2026. SSH Public Key - Login Without Password. Luettavissa: https://terokarvinen.com/ssh-public-key-login-without-password/. Luettu: 28.10.2026.
+
+Punnala, T. 2025. H1 Installing Linux. GitHub. Luettavissa: https://github.com/punnalathomas/linux-course/blob/main/h1-installing-linux.md. Luettu: 28.10.2026.
