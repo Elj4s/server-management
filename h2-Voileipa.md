@@ -32,7 +32,9 @@ Kysymys: Miten salasanaton sudo voidaan ottaa käyttöön Ansiblella usealla pal
 - Voi määrittää tiedostojen ja hakemistojen käyttöoikeuksia ja omistajuutta.
 
 #### Content
-- Määrittää tiedoston sisällön. Toimii vain, kun ```dest``` osoittaa tiedostoon. Luo tiedoston, jos sitä ei vielä ole olemassa.
+- Määrittää tiedoston sisällön.
+- Toimii vain, kun ```dest``` osoittaa tiedostoon.
+- Luo tiedoston, jos sitä ei vielä ole olemassa.
 
 #### Dest
 - Määrittää kohteen polun, johon tiedosto kopioidaan.
@@ -70,13 +72,17 @@ Kysymys: Miten salasanaton sudo voidaan ottaa käyttöön Ansiblella usealla pal
 - Hallitsee apt-paketteja esimerkiksi Debian- ja Ubuntu-käyttöjärjestelmissä.
 
 #### Name
-- Määrittää käsiteltävän apt-paketin nimen. Dokumentaatiosta ei löytynyt suoraa selitystä, joten käyttötarkoituksen päättelin esimerkkien perusteella.
+- Määrittää käsiteltävän apt-paketin nimen.
+- Dokumentaatiosta ei löytynyt suoraa selitystä, joten käyttötarkoituksen päättelin esimerkkien perusteella.
 
 #### State
-- Määrittää paketin halutun tilan. Esimerkeissä käytetään arvoja "present", "absent" ja "latest".
+- Määrittää paketin halutun tilan.
+- Esimerkeissä käytetään arvoja "present", "absent" ja "latest".
 
 #### Update_cache
-- Päivittää apt-pakettien välimuistin. Esimerkeissä käytetään arvoa "yes". Dokumentaatiosta en löytynyt selitystä, joten käyttötarkoituksen päättelin esimerkkien perusteella.
+- Päivittää apt-pakettien välimuistin.
+- Esimerkeissä käytetään arvoa "yes".
+- Dokumentaatiosta en löytynyt selitystä, joten käyttötarkoituksen päättelin esimerkkien perusteella.
 
 #### Apt esimerkki
 
@@ -104,4 +110,84 @@ Kysymys: Miten salasanaton sudo voidaan ottaa käyttöön Ansiblella usealla pal
 - Käytetään vain, kun state=link tai state=hard.
 
 #### State
-- 
+- Määrittää tiedoston tai hakemiston halutun tilan.
+- Mahdollisia arvoja ovat "absent", "directory", "file", "link", "hard" ja "touch".
+
+#### File esimerkki
+
+```
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: /file/to/link/to
+    dest: /path/to/symlink
+    owner: foo
+    group: foo
+    state: link
+```
+
+### Ansible-doc user
+
+- Hallitaan käyttäjätilejä ja niiden ominaisuuksia.
+
+#### Name
+- Määrittää hallittavan käyttäjätilin nimen.
+
+#### Create_home
+- Luo käyttäjälle kotihakemiston, jos käyttäjätili luodaan tai kotihakemistoa ei vielä ole olemassa.
+
+#### Comment
+- Määrittää passwd-tiedoston kommenttikentän sisällön, sisältää yleensä käyttäjän nimen.
+
+#### Groups
+- Määrittää luettelon ryhmistä, joiden jäsen käyttäjä on.
+
+#### Shell
+- Määrittää käyttäjän kirjautumis shellin.
+- Esimerkkinä "/bin/bash".
+
+#### State 
+- Määrittää käyttäjätilin halutun tilan. "Absent" tarkoittaa käyttäjätilin poistamista.
+- Dokumentaatiosta ei löytynyt selitystä, joten käyttötarkoituksen pääteltiin esimerkkien perusteella.
+
+#### System
+- Määrittää, onko käyttäjätili järjestelmätili.
+- Oletusarvo on "true"-
+
+#### User esimerkki
+
+- Luodaan käyttäjä "johnd" ja kotihakemisto.
+
+```
+- name: Add the user 'johnd' with a specific uid and a primary group of 'admin'
+  ansible.builtin.user:
+    name: johnd
+    comment: John Doe
+    uid: 1040
+    group: admin
+```
+
+### Ansible-doc authorized_key
+
+- Lisätään tai poistetaan SSH avaimia tietyiltä käyttäjätileiltä.
+
+#### User
+- Määrittää käyttäjätilin, jolle SSH-avain lisätään tai poistetaan.
+- Dokumentaatiosta ei löytynyt selitystä, joten käyttötarkoituksen päättelin esimerkkien perusteella.
+
+#### Key
+- Määrittää lisättävän julkisen SSH avaimen.
+- Avain voidaan antaa merkkijonona, URL-osoitteena tai muodossa "file://".
+
+#### Authorized_key esimerkki
+
+- Asetetaan SSH-avain tiedostosta.
+
+```
+- name: Set authorized key taken from file
+  ansible.posix.authorized_key:
+    user: charlie
+    state: present
+    key: "{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}"
+```
+
+
