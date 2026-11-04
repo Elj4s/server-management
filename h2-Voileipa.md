@@ -190,4 +190,87 @@ Kysymys: Miten salasanaton sudo voidaan ottaa käyttöön Ansiblella usealla pal
     key: "{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}"
 ```
 
+## a) Sudoless
 
+Tehtävän tavoitteena oli luoda Ansiblea varten käyttäjätunnus, jolla voidaan kirjautua SSH-yhteydellä ilman salasanaa ja käyttää sudo-oikeuksia ilman salasanaa.
+
+Loin sudoless-ryhmän ja uuden käyttäjätunnuksen antero. Lisäsin antero-käyttäjän sudoless-ryhmään. (Karvinen 2026)
+
+```
+sudo groupadd sudoless
+sudo adduser antero
+sudo adduser antero sudoless
+```
+
+(sudo_adduser_antero.png)
+Käyttäjää luodessani yritin jättää salasanan tyhjäksi. Debian ei kuitenkaan hyväksynyt tyhjää salasanaa, vaan ilmoitti: No password has been supplied. Annoin käyttäjälle salasanan, ja käyttäjän luominen onnistui.
+
+Määritin sudoless-ryhmän käyttäjille salasanattoman sudo-oikeuden. (Karvinen 2026)
+
+```sudo visudo /etc/sudoers.d/sudoless```
+
+Lisäsin tiedostoon rivin: ```%sudoless ALL = (ALL) NOPASSWD: ALL```
+
+### SSH kirjautuminen
+
+(antero-ssh.png)
+Määritin antero-käyttäjälle SSH kirjautumisen. Käytin aiemmin luotua SSH avainta arttu@debian käyttäjätililtä.
+
+```
+ssh-copy-id antero@localhost
+ssh antero@localhost
+```
+
+Kirjautuminen onnistui ilman salasanaa. SSH-avainkirjautumsen avulla Ansible voi muodostaa yhteyden antero-käyttäjään automaattisesti. Eli nyt käytössä oli salasanaton sudo. (Karvinen 2026)
+(antero-sudo-ssh.png)
+
+## b) Antero - salasanaton SSH-kirjautuminen Ansiblella
+
+Tehtävän tavoitteena oli automatisoida uuden käyttäjätunnuksen luominen ja SSH-avainkirjautumisen määrittäminen Ansiblella. A-kohdassa käyttäjä luotiin käsin, mutta tässä kohdassa samat asiat toteutettiin Ansiblella. 
+
+Käyttäjän luominen ja julkisen SSH-avaimen lisääminen automatisoidaan Ansible roolin avulla. Tähän käytetään user- ja authorized_key osia.  (Karvinen 2026)
+Loin uuden Ansible-roolin hakemistoon roles/antero2/tasks/.
+
+Lisäsin roolin roles/antero2/tasks/main.yml-tiedostoon kaksi tehtävää:
+- user:lla luodaan käyttäjä nimeltä antero2.
+- authorized_key:lla lisätään käyttäjälle Arttu-käyttäjän julkinen SSH-avain.
+
+(ansible-main-yml.png)
+
+Lisäsin uuden roolin site.yml-tiedostoon.
+(ansible-site-yml.png)
+
+Suoritin Ansible-playbookin komennolla
+```ansible-playbook site.yml --ask-become-pass```
+
+(ansible-antero-playbook.png)
+Ansible suoritti kaikki tehtävät onnistuneesti.
+
+## c) Package
+
+Tehtävän tavoitteena oli asentaa kaksi pakettia Ansiblella. Loin uuden packages-roolin.
+
+(package-main-yml.png)
+Uuden packages-roolin main.yml tiedosto, jossa näkyy kaksi valittua pakettia ja asennusasetukset.
+
+Lisäsin site.yml tiedostoon uuden packages roolin ja suoritin Ansible-playbookin.
+
+(ansible-packages-playbook.png)
+Pakettien asennus onnistui ilman virheitä.
+
+## d) File
+
+Tehtävän tavoitteena oli luoda monirivinen tiedosto Ansiblella, ja määrittää tiedoston omistaja, omistaja ja käyttöoikeudet.
+
+Loin uuden file-roolin. Käytin tiedoston luomiseen copy-moduulia, jonka avulla voi kopioida tiedostoja tai määrittää tiedoston sisältö. (Karvinen 2026).
+
+(file-main-yml.png)
+Määritin tiedoston sijainniksi /tmp/ansible-file.txt. Määritin omistajaksi ja omistavaksi ryhmäksi antero2-käyttäjän.
+Asetin tiedoston käyttöoikeudeksi oktaaliluvun 0640, jonka symbolinen muoto on -rw-r-----.
+
+Tiedoston omistaja voi lukea ja muokata tiedostoa, ryhmän jäsenet voivat lukea tiedostoa ja muilla ei ole käyttöoikeuksia.
+
+(ansible-file-playbook.png)
+Ansible suoritti file-roolin copy-tehtävän onnistuneesti.
+
+## e) Jotain muuta
