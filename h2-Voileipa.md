@@ -274,3 +274,14 @@ Tiedoston omistaja voi lukea ja muokata tiedostoa, ryhmän jäsenet voivat lukea
 Ansible suoritti file-roolin copy-tehtävän onnistuneesti.
 
 ## e) Jotain muuta
+
+## Lähteet
+Karvinen, T. 2026. Passwordless Sudo with Ansible. Luettavissa: https://terokarvinen.com/passwordless-sudo-with-ansible/. Luettu: 4.11.2026.
+
+Karvinen, T. 2026. Palvelinten Hallinta. Luettavissa: https://terokarvinen.com/palvelinten-hallinta/. Luettu: 4.11.2026.
+
+Karvinen, T. 2026. Sudo without password. Luettavissa: https://terokarvinen.com/passwordless-sudo/. Luettu: 4.11.2026.
+
+Munroe, R. 2006. xkcd 149: Sandwich. Luettavissa: https://xkcd.com/149/. Luettu: 4.11.2026.
+
+Tämän tehtävän tekemisessä hyödynsin ChatGPT:tä Ansible-komentojen ja tehtävien toteutuksen tukena. Käytin tekoälyn antamia komentoja tehtävien a), b), c) ja d) toteutuksessa.
