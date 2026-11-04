@@ -202,7 +202,7 @@ sudo adduser antero
 sudo adduser antero sudoless
 ```
 
-(sudo_adduser_antero.png)
+![Antero-käyttäjän luominen adduser-komennolla](sudo_adduser_antero.png)
 Käyttäjää luodessani yritin jättää salasanan tyhjäksi. Debian ei kuitenkaan hyväksynyt tyhjää salasanaa, vaan ilmoitti: No password has been supplied. Annoin käyttäjälle salasanan, ja käyttäjän luominen onnistui.
 
 Määritin sudoless-ryhmän käyttäjille salasanattoman sudo-oikeuden. (Karvinen 2026)
@@ -213,7 +213,7 @@ Lisäsin tiedostoon rivin: ```%sudoless ALL = (ALL) NOPASSWD: ALL```
 
 ### SSH kirjautuminen
 
-(antero-ssh.png)
+![Antero-käyttäjän SSH-kirjautuminen](antero-ssh.png)
 Määritin antero-käyttäjälle SSH kirjautumisen. Käytin aiemmin luotua SSH avainta arttu@debian käyttäjätililtä.
 
 ```
@@ -222,7 +222,7 @@ ssh antero@localhost
 ```
 
 Kirjautuminen onnistui ilman salasanaa. SSH-avainkirjautumsen avulla Ansible voi muodostaa yhteyden antero-käyttäjään automaattisesti. Eli nyt käytössä oli salasanaton sudo. (Karvinen 2026)
-(antero-sudo-ssh.png)
+![Antero-käyttäjän sudo- ja SSH-testit](antero-sudo-ssh.png)
 
 ## b) Antero - salasanaton SSH-kirjautuminen Ansiblella
 
@@ -235,27 +235,27 @@ Lisäsin roolin roles/antero2/tasks/main.yml-tiedostoon kaksi tehtävää:
 - user:lla luodaan käyttäjä nimeltä antero2.
 - authorized_key:lla lisätään käyttäjälle Arttu-käyttäjän julkinen SSH-avain.
 
-(ansible-main-yml.png)
+![Ansible main.yml](ansible-main-yml.png)
 
 Lisäsin uuden roolin site.yml-tiedostoon.
-(ansible-site-yml.png)
+![Ansible site.yml](ansible-site-yml.png)
 
 Suoritin Ansible-playbookin komennolla
 ```ansible-playbook site.yml --ask-become-pass```
 
-(ansible-antero-playbook.png)
+![Antero-roolin Ansible-ajo](ansible-antero-playbook.png)
 Ansible suoritti kaikki tehtävät onnistuneesti.
 
 ## c) Package
 
 Tehtävän tavoitteena oli asentaa kaksi pakettia Ansiblella. Loin uuden packages-roolin.
 
-(package-main-yml.png)
+![Packages-roolin main.yml](package-main-yml.png)
 Uuden packages-roolin main.yml tiedosto, jossa näkyy kaksi valittua pakettia ja asennusasetukset.
 
 Lisäsin site.yml tiedostoon uuden packages roolin ja suoritin Ansible-playbookin.
 
-(ansible-packages-playbook.png)
+![Pakettien asennuksen Ansible-ajo](ansible-packages-playbook.png)
 Pakettien asennus onnistui ilman virheitä.
 
 ## d) File
@@ -264,13 +264,13 @@ Tehtävän tavoitteena oli luoda monirivinen tiedosto Ansiblella, ja määrittä
 
 Loin uuden file-roolin. Käytin tiedoston luomiseen copy-moduulia, jonka avulla voi kopioida tiedostoja tai määrittää tiedoston sisältö. (Karvinen 2026).
 
-(file-main-yml.png)
+![File-roolin main.yml](file-main-yml.png)
 Määritin tiedoston sijainniksi /tmp/ansible-file.txt. Määritin omistajaksi ja omistavaksi ryhmäksi antero2-käyttäjän.
 Asetin tiedoston käyttöoikeudeksi oktaaliluvun 0640, jonka symbolinen muoto on -rw-r-----.
 
 Tiedoston omistaja voi lukea ja muokata tiedostoa, ryhmän jäsenet voivat lukea tiedostoa ja muilla ei ole käyttöoikeuksia.
 
-(ansible-file-playbook.png)
+![File-roolin Ansible-ajo](ansible-file-playbook.png)
 Ansible suoritti file-roolin copy-tehtävän onnistuneesti.
 
 ## e) Jotain muuta
