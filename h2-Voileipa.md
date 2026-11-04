@@ -275,13 +275,23 @@ Ansible suoritti file-roolin copy-tehtävän onnistuneesti.
 
 ## e) Jotain muuta
 
+Tehtävässä d) käytin Ansiblea tiedoston luomiseen copy-moduulilla. Tässä tehtävässä käytin file-moduulia. Loin uuden hakemiston /tmp/ansible-test ja määritin sille omistajan, ryhmän ja käyttöoikeudet. Lisäksi halusin harjoitella mm. state- ja path -parametrien käyttöä. 
+
+Loin uuden roolin Ansiblessa nimeltä directory. Määritin hakemiston sijainniksi /tmp/ansible-test. Käytin parametria state: directory varmistaakseni, että hakemisto luodaan. Lisäksi määritin omistajaksi ja ryhmäksi antero2, ja käyttöoikeuksiksi 0750.
+
+![Directory-roolin main.yml-tiedosto](directory-main-yml.png)
+
+Hakemiston luominen onnistui Ansiblella. Playbookin suorittamisen jälkeen tarkistin sen tiedot ls -ld-komennolla. Hakemiston omistaja ja ryhmä olivat antero2 ja käyttöoikeudet olivat 0750, eli omistajalla on kaikki oikeudet, ryhmällä luku- ja suoritusoikeudet ja muilla ei oikeuksia.
+
+![Directory](ansible-directory-playbook.png)
+
+![Omistaja, ryhmä ja käyttöoikeudet](directory-permissions.png)
+
 ## Lähteet
 Karvinen, T. 2026. Passwordless Sudo with Ansible. Luettavissa: https://terokarvinen.com/passwordless-sudo-with-ansible/. Luettu: 4.11.2026.
-
-Karvinen, T. 2026. Palvelinten Hallinta. Luettavissa: https://terokarvinen.com/palvelinten-hallinta/. Luettu: 4.11.2026.
 
 Karvinen, T. 2026. Sudo without password. Luettavissa: https://terokarvinen.com/passwordless-sudo/. Luettu: 4.11.2026.
 
 Munroe, R. 2006. xkcd 149: Sandwich. Luettavissa: https://xkcd.com/149/. Luettu: 4.11.2026.
 
-Tämän tehtävän tekemisessä hyödynsin ChatGPT:tä Ansible-komentojen ja tehtävien toteutuksen tukena. Käytin tekoälyn antamia komentoja tehtävien a), b), c) ja d) toteutuksessa.
+Tämän tehtävän tekemisessä hyödynsin ChatGPT:tä Ansible-komentojen kanssa tehtävissä a), b), c), d) ja e).
