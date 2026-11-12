@@ -13,9 +13,10 @@ Huomio: Malli tekee palvelimen ylläpidosta selkeää, koska on kolme selkeää 
 
 - Ansible Handler on tehtävä, joka suoritetaan vain silloin, kun jokin toinen tehtävä ilmoittaa siitä notify-komennolla.
 - Esimerkki:
+  
 ```
 tasks:
-- name: Template configuration file
+  - name: Template configuration file
   ansible.builtin.template:
     src: template.j2
     dest: /etc/foo.conf
