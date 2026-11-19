@@ -83,4 +83,8 @@ Playbook suoritettiin onnistuneesti, eikä järjestelmään tehty muutoksia. Yht
 
 ## Lähteet
 
+Käytin ChatGPT-tekoälyä apuna Main.yml tiedostojen määrittämisessä, Redis-palvelun handlerin luomisessa ja käyttöoikeusvirheen selvittämisessä.
+
 Karvinen, T. 2024. Configuration Management of Distributed Systems over Unreliable and Hostile Networks. Väitöskirja. University of Westminster. Luettavissa: https://westminsterresearch.westminster.ac.uk/item/w7vvz/configuration-management-of-distributed-systems-over-unreliable-and-hostile-networks. Luettu: 17.11.2026.
+
+
